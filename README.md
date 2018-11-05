@@ -34,8 +34,8 @@ Server Path
 ```
 Postman Examples
 1. Create Flight [POST] - http://localhost/flight_api/flight_service.php/CreateFlight. Body - Upload JSON file  
-2. List Flight []- http://localhost/flight_api/flight_service.php/flights
-3. Flight Details - http://localhost/flight_api/flight_service.php/flights/{uuid}
+2. List Flight [GET] - http://localhost/flight_api/flight_service.php/flights
+3. Flight Details [GET] - http://localhost/flight_api/flight_service.php/flights/{uuid}
 ```
 
 ## Authors
