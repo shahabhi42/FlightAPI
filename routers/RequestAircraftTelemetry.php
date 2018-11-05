@@ -52,23 +52,21 @@ class RequestAircraftTelemetry{
                 $aircraft_lists = $database->select(CreateAircraftTelemetry::AIRCRAFT_TABLE . $join_battery_frames . $join_gps_frames ,
                     $clause, Database::RETURN_ARRAY, '', Database::SORT_RESULTS_ASC, '', $fields);
 
-                if ($aircraft_lists != 0 && count($aircraft_lists) > 0) {
-                    $result = [];
+                if ($aircraft_lists!=0 && count($aircraft_lists)>0) {
                     $batteries = $this->buildBatteriesInfo($aircraft_lists);
                     $flight_path = $this->buildGeoJson($aircraft_lists);
-                    foreach ($aircraft_lists as $list) {
+                    if (count($batteries)>0 && count($flight_path)) {
                         $result = [
-                            'UUID' => $list[CreateAircraftTelemetry::UUID],
-                            'AircraftName' => $list[CreateAircraftTelemetry::AIRCRAFT_NAME],
-                            'AircraftSerialNumber' => $list[CreateAircraftTelemetry::COLUMN_AIRCRAFT_SERIAL_NUMBER],
+                            'UUID'=>$aircraft_lists[0][CreateAircraftTelemetry::UUID],
+                            'AircraftName' => $aircraft_lists[0][CreateAircraftTelemetry::AIRCRAFT_NAME],
+                            'AircraftSerialNumber'=>$aircraft_lists[0][CreateAircraftTelemetry::COLUMN_AIRCRAFT_SERIAL_NUMBER],
                             'Batteries'=>$batteries,
                             'FlightPath'=>$flight_path,
                         ];
-                        break;
-                    }
 
-                    header('Content-Type: application/json');
-                    echo json_encode($result);
+                        header('Content-Type: application/json');
+                        echo json_encode($result);
+                    }
                 } else {
                     (new ApiException('Bad Request', 400))->getException();
                 }
@@ -81,11 +79,10 @@ class RequestAircraftTelemetry{
     private function buildBatteriesInfo($aircraft_lists){
         // Loop through rows to build batteries array
         $batteries = [];
-
         foreach ($aircraft_lists as $list){
             $batteries[] = [
-                'BatteryTemperature' => $list[CreateAircraftTelemetry::BATTERY_TEMPERATURE],
-                'BatteryPercent' => $list[CreateAircraftTelemetry::BATTERY_PERCENT],
+                'BatteryTemperature'=>$list[CreateAircraftTelemetry::BATTERY_TEMPERATURE],
+                'BatteryPercent'=>$list[CreateAircraftTelemetry::BATTERY_PERCENT],
             ];
         }
 
@@ -101,12 +98,12 @@ class RequestAircraftTelemetry{
         }
 
         $geo_json = [
-            'type'      => 'FeatureCollection',
-            'features'  => [
+            'type'    => 'FeatureCollection',
+            'features' => [
                 'type' => 'Feature',
                 'properties' => [],
-                'geometry' => [
-                    'type' => 'LineString',
+                'geometry'   => [
+                    'type'   => 'LineString',
                     'coordinates' => $coordinates,
                 ],
             ],
