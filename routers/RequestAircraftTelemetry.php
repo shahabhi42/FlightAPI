@@ -40,7 +40,7 @@ class RequestAircraftTelemetry{
     // Flight details
     public function getFlightDetails($path_info){
         try{
-            $aircraft_id = substr($path_info, 9); // For aircraft details. Get the id
+            $aircraft_id = substr($path_info, 9); // For aircraft details. Get the provided uuid
 
             $database = new Database();
 
@@ -52,7 +52,7 @@ class RequestAircraftTelemetry{
                 $aircraft_lists = $database->select(CreateAircraftTelemetry::AIRCRAFT_TABLE . $join_battery_frames . $join_gps_frames ,
                     $clause, Database::RETURN_ARRAY, '', Database::SORT_RESULTS_ASC, '', $fields);
 
-                if ($aircraft_lists != 0 && $aircraft_lists > 0) {
+                if ($aircraft_lists != 0 && count($aircraft_lists) > 0) {
                     $result = [];
                     $batteries = $this->buildBatteriesInfo($aircraft_lists);
                     $flight_path = $this->buildGeoJson($aircraft_lists);
@@ -69,6 +69,8 @@ class RequestAircraftTelemetry{
 
                     header('Content-Type: application/json');
                     echo json_encode($result);
+                } else {
+                    (new ApiException('Bad Request', 400))->getException();
                 }
             }
         } catch(Exception $exception) {
@@ -77,6 +79,7 @@ class RequestAircraftTelemetry{
     }
 
     private function buildBatteriesInfo($aircraft_lists){
+        // Loop through rows to build batteries array
         $batteries = [];
 
         foreach ($aircraft_lists as $list){
@@ -104,7 +107,6 @@ class RequestAircraftTelemetry{
                 'properties' => [],
                 'geometry' => [
                     'type' => 'LineString',
-                    // Pass Longitude and Latitude Columns here
                     'coordinates' => $coordinates,
                 ],
             ],

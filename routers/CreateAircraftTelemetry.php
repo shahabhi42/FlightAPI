@@ -56,7 +56,7 @@ class CreateAircraftTelemetry{
                 $aircraft_uuid = $request[self::UUID];
 
                 // Check if the overview information was inserted
-                if ($aircraft_internal_id!=0 && $aircraft_internal_id>0) {
+                if ($aircraft_internal_id!=0 && count($aircraft_internal_id)>0) {
                     // Aircraft batteries
                     foreach ($request[self::AIRCRAFT_BATTERIES] as $battery) {
                         $aircraft_battery_data_array = [self::AIRCRAFT_UUID=>$aircraft_uuid,
@@ -67,7 +67,7 @@ class CreateAircraftTelemetry{
                         $database->insert(self::AIRCRAFT_BATTERIES_TABLE, $aircraft_battery_data_array);
                     }
                     foreach ($request[self::FRAMES] as $frame) {
-                        // Frame gps
+                        // Looping through frames
                         switch ($frame['type']) {
                             case self::FRAME_BATTERY:
                                 $battery_data_array = [self::AIRCRAFT_UUID=>$aircraft_uuid,
@@ -89,8 +89,12 @@ class CreateAircraftTelemetry{
                                 break;
                         }
                     }
+                    echo $aircraft_internal_id;
+                } else {
+                    (new ApiException('Bad Request', 400))->getException();
                 }
-                echo $aircraft_internal_id;
+            } else {
+                (new ApiException('Bad Request', 400))->getException();
             }
         } catch(Exception $exception) {
             (new ApiException('Bad Request' . $exception, 400))->getException();

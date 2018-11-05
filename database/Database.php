@@ -17,10 +17,10 @@ class Database extends PDO{
     // Database parameters
     private $database = 'flights_api';
     private $hostname = 'localhost';
-    private $password = 'root';
+    private $password = 'testuser';
     private $schema = 'NONE';
     private $type = 'mysql';
-    private $username = 'root';
+    private $username = 'testuser';
 
     /**
      * Function __construct
@@ -142,34 +142,6 @@ class Database extends PDO{
         }
         catch(Exception $e){
             return $e->getMessage();
-        }
-    }
-
-    public function count($table, $where){
-        $sql_schema = ($this->schema!="") ? $this->schema."." : "";
-        $sql = "SELECT COUNT(*) FROM " . $sql_schema.$table;
-        if(isset($where) && $where != "") $sql .= " WHERE $where";
-        $sql .= ";";
-
-        return $this->query($sql)->fetchColumn();
-    }
-
-    // Database Structure Functions
-
-    public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat = "html"){
-        // Variable functions for won't work with language constructs such as echo and print, so these are replaced with print_r.
-        if(in_array(strtolower($errorCallbackFunction), ["echo","print"])){
-            $errorCallbackFunction = "print_r";
-        }
-
-        if(function_exists($errorCallbackFunction)){
-            $this->errorCallbackFunction = $errorCallbackFunction;
-
-            if(!in_array(strtolower($errorMsgFormat), ["html","text"])){
-                $errorMsgFormat = "html";
-            }
-
-            $this->errorMsgFormat = $errorMsgFormat;
         }
     }
 

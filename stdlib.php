@@ -6,7 +6,5 @@ spl_autoload_register(function ($class) {
         include "/var/www/html/flight_api/utilities/$class.php";
     } elseif (file_exists("/var/www/html/flight_api/routers/$class.php")) { // Routers
         include "/var/www/html/flight_api/routers/$class.php";
-    } elseif (file_exists("/var/www/html/flight_api/routers/$class.php")) { // Routers
-        include "/var/www/html/flight_api/routers/$class.php";
     }
 });
