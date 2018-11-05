@@ -58,7 +58,7 @@ class RequestAircraftTelemetry{
                     if (count($batteries)>0 && count($flight_path)) {
                         $result = [
                             'UUID'=>$aircraft_lists[0][CreateAircraftTelemetry::UUID],
-                            'AircraftName' => $aircraft_lists[0][CreateAircraftTelemetry::AIRCRAFT_NAME],
+                            'AircraftName'=>$aircraft_lists[0][CreateAircraftTelemetry::AIRCRAFT_NAME],
                             'AircraftSerialNumber'=>$aircraft_lists[0][CreateAircraftTelemetry::COLUMN_AIRCRAFT_SERIAL_NUMBER],
                             'Batteries'=>$batteries,
                             'FlightPath'=>$flight_path,
