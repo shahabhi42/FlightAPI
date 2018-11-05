@@ -37,7 +37,3 @@ Postman Examples
 2. List Flight [GET] - http://localhost/flight_api/flight_service.php/flights
 3. Flight Details [GET] - http://localhost/flight_api/flight_service.php/flights/{uuid}
 ```
-
-## Authors
-
-Abhi Shah
